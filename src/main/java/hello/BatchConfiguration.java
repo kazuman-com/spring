@@ -28,6 +28,9 @@ public class BatchConfiguration {
 
     @Autowired
     public DataSource dataSource;
+    
+    @Autowired
+    private MyDiff diff;
 
     // tag::readerwriterprocessor[]
     @Bean
@@ -42,8 +45,6 @@ public class BatchConfiguration {
     	hoge.setClassesToBeBound(Dir.class);
     	reader2.setUnmarshaller(hoge);
     	
-    	
-    	System.out.println();
     	
     	return reader2;
     }
@@ -66,8 +67,8 @@ public class BatchConfiguration {
         return jobBuilderFactory.get("importUserJob")
                 .incrementer(new RunIdIncrementer())
                 .listener(listener)
-                .flow(step1())
-                .end()
+                .start(step1())
+                .next(step2())
                 .build();
     }
 
@@ -80,6 +81,13 @@ public class BatchConfiguration {
                 .writer(writer())
                 .build();
         
+    }
+    
+    
+    public Step step2() {
+    	return stepBuilderFactory.get("step2")
+    			.tasklet(diff)
+    			.build();
     }
     // end::jobstep[]
 }

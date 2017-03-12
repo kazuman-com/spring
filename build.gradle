@@ -28,5 +28,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-batch")
     compile("org.hsqldb:hsqldb")
     compile("org.springframework:spring-oxm")
+    compile("org.xmlunit:xmlunit-core:2.3.0")
     testCompile("junit:junit")
 }
